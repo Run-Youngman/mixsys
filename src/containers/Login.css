@@ -1,0 +1,10 @@
+.btn-change-type {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    right: -198px;
+    top: 50%;
+    margin-top: -14px;
+    cursor: pointer;
+    z-index: 1;
+  }
