@@ -13,18 +13,24 @@ method:访问网络的方式，get或者post
 successAction:这个是访问网络成功后回调的redux函数
 */
 export const createAsyncAction = (url, method, successAction) => {
-    method = method.toLowerCase();
+    method = method.toUpperCase();
     return (
-        (data) => {
+        (pathnames = {}, data = {}) => {
             return (dispatch) => {
                 let params = {
-                    headers: init,
+                    headers: headers,
+                    mode: 'cors',
+                    cache: 'default',
                     method
+                }
+                let u = encodeURI(getUrl(url, pathnames));
+                if ((method === 'POST' || method === 'PUT') && Object.keys(data.length !== 0)) {
+                    params.body = JSON.stringify(data);
                 }
                 if(method === 'GET') {
 
                 }
-                return fetch(url,params).then(rst => {
+                return fetch(u,params).then(rst => {
                     const contentType = rst.headers.get('content-type');
                     if(contentType && contentType.indexOf('application/json') !== -1){
                         return rst.json();
@@ -44,3 +50,13 @@ export const createAsyncAction = (url, method, successAction) => {
         }
     )
 }
+
+const getUrl = (template, pathnames = {}) => {
+    return template.replace(/\{\{(\w+)}}/g, (literal, key) => {
+        if (key in pathnames) {
+            return pathnames[key];
+        } else {
+            return '';
+        }
+    });
+};

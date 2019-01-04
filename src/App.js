@@ -23,10 +23,11 @@ class App extends Component {
 						{/* <Route path="/:module?" component={Nav}/> */}
 						<Switch>
 							<Route path='/login' component={APP.LOGIN} />
+							<Route path='/main' component={APP.MAIN} />
 							<Route path='/page404' render={() => {
 								return (<h1>404 not found</h1>);
 							}} />
-							<Redirect from='/' to='/page404' />
+							<Redirect from='/' to='/login' />
 						</Switch>
 						{/* <Route path="/:module?" component={Footer}/> */}
 					</div>

@@ -5,11 +5,18 @@ const setLoginData1 = createAction('测试action');
 const getAllEmployeeOk =  createAction('得到所有用户');
 const getAllEmployee  = createAsyncAction('http://localhost:8080/tabledata','GET',getAllEmployeeOk);
 
+const createEmployee = createAsyncAction('http://localhost:8080/createEmployee','POST');
+const updateEmployee = createAsyncAction('http://localhost:8080/updateEmployee?name={{name}}','PUT');
+const deleteEmployee = createAsyncAction('http://localhost:8080/deleteEmployee?name={{name}}','DELETE');
+
 export const actions = {
     setLoginData,
     setLoginData1,
     getAllEmployee,
-    getAllEmployeeOk 
+    getAllEmployeeOk,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee
 }
 export default handleActions({
     [setLoginData]: (state, {payload}) => ({

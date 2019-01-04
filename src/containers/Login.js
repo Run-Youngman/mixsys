@@ -48,38 +48,35 @@ class Login extends Component {
         });
     };
     doLogin = () =>{
-        const { setLoginData } = this.props.bindedactions;
-        setLoginData('123');
-        // this.props.form.validateFields((err,values)=>{
-        //     if(!err){
-        //         var myHeaders = new Headers();
-        //         myHeaders.append('Content-Type', 'application/json')
-        //         myHeaders.append('Origin', 'http://localhost:3000')
-        //         var myInit = {
-        //             method: 'POST',
-        //             headers: myHeaders,
-        //             mode: 'cors',
-        //             cache: 'default',
-        //             body: JSON.stringify(values)
-        //         };
-        //         fetch('http://localhost:8080/login',myInit).then(async(rst)=>{
-        //             let response = await rst.json();
-        //             debugger;
-        //             if(!response.failed){
-        //                 notification.success({
-        //                     message: '系统信息',
-        //                     description: 'login successed',
-        //                 });
-        //                 this.props.history.push('/');
-        //             }else{
-        //                 notification.error({
-        //                     message: '系统信息',
-        //                     description: response.reason,
-        //                 });
-        //             }
-        //         });
-        //     }
-        // })
+        this.props.form.validateFields((err,values)=>{
+            if(!err){
+                var myHeaders = new Headers();
+                myHeaders.append('Content-Type', 'application/json')
+                myHeaders.append('Origin', 'http://localhost:3000')
+                var myInit = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    mode: 'cors',
+                    cache: 'default',
+                    body: JSON.stringify(values)
+                };
+                fetch('http://localhost:8080/login',myInit).then(async(rst)=>{
+                    let response = await rst.json();
+                    if(!response.failed && !response.error){
+                        notification.success({
+                            message: '系统信息',
+                            description: 'login successed',
+                        });
+                        this.props.history.push('/main');
+                    }else{
+                        notification.error({
+                            message: '系统信息',
+                            description: response.reason,
+                        });
+                    }
+                });
+            }
+        })
     }
     render() {
         const { getFieldDecorator } = this.props.form;
