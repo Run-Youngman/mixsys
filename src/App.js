@@ -3,15 +3,15 @@ import './App.css';
 import APP from './containers';
 import reducers from './Action';
 import { Provider } from 'react-redux';
-import store,{updateReducer} from './store';
+import store, { updateReducer } from './store';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
-class App extends Component {   
+class App extends Component {
 
 	async  componentDidMount() {
-    	Object.keys(reducers).forEach(name=>{
-			updateReducer(name,reducers[name]);
+		Object.keys(reducers).forEach(name => {
+			updateReducer(name, reducers[name]);
 		});
 	}
 
@@ -19,8 +19,7 @@ class App extends Component {
 		return (
 			<Provider store={store}>
 				<BrowserRouter>
-					<div style={{ width: '100%'}}>
-						{/* <Route path="/:module?" component={Nav}/> */}
+					<div style={{ width: '100%' }}>
 						<Switch>
 							<Route path='/login' component={APP.LOGIN} />
 							<Route path='/main' component={APP.MAIN} />
@@ -29,7 +28,6 @@ class App extends Component {
 							}} />
 							<Redirect from='/' to='/login' />
 						</Switch>
-						{/* <Route path="/:module?" component={Footer}/> */}
 					</div>
 				</BrowserRouter>
 			</Provider>

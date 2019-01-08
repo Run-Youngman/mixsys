@@ -1,10 +1,15 @@
-import { Button, Popconfirm, Table, message, Modal, Form, Divider } from 'antd';
+import { Icon, Layout } from 'antd';
+import { Switch, Route } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import AddEmployee from '../components/Main/AddEmployee'
+import { Submenu } from '../_platform/components';
 import {actions} from '../Action/login/login';
-import './Main.css';
+import Home from './Home'
+import Pics from './Pics'
+import Chat from './Chat'
+
+const { Header, Content, Footer, Sider } = Layout;
 
 @connect(
     state => {
@@ -15,158 +20,92 @@ import './Main.css';
         bindedactions: bindActionCreators({ ...actions }, dispatch),
     })
 )
-class Main extends Component {   
+export default class Main extends Component {   
+    static menus = [
+        {
+            key: 'Home',
+            id: 'home',
+            path: '/main/home',
+            name: '主页',
+            icon: <Icon type="solution" />,
+        },
+        {
+            key: 'Pics',
+            id: 'pics',
+            path: '/main/pics',
+            name: '爬虫图片',
+            icon: <Icon type="solution" />,
+        },
+        {
+            key: 'chat',
+            id: 'chat',
+            path: '/main/chat',
+            name: '聊天室',
+            icon: <Icon type="solution" />,
+        },
+        {
+            key: 'ReactRouter',
+            id: 'ReactRouter',
+            path: '/reactrouter',
+            name: 'ReactRouter',
+            icon: <Icon type="solution" />,
+        },
+        {
+            key: 'Component',
+            id: 'Component',
+            path: '/component',
+            name: 'Component',
+            icon: <Icon type="solution" />,
+        },
+        {
+            key: 'Schedule',
+            id: 'Schedule',
+            path: '/schedule',
+            name: '进度模拟',
+            icon: <Icon type="solution" />,
+        },
+        {
+            key: 'Chat',
+            id: 'Chat',
+            path: '/chat',
+            name: '聊天室',
+            icon: <Icon type="solution" />,
+        },
+    ]
     constructor(props) { 
         super(props);
         this.state = {
-            newKey: Math.random(),
-            visiable: false,
-            object: {},
-            currentType: 'add', // 当前弹框的类型，默认为增加员工
         };
-        this.columns = [{
-                title: '序号',
-                width: 60,
-                render: (text, record, index) => {
-                    return index + 1
-                }
-            },{
-                title: '姓名',
-                dataIndex: 'name',
-                width: 100,
-            },{
-                title: '年龄',
-                dataIndex: 'age',
-                width: 100,
-            },{
-                title: '薪水',
-                dataIndex: 'salary',
-                width: 80,
-            },{
-                title: '电话',
-                dataIndex: 'phone',
-                width: 200,
-            },{
-                title: '操作',
-                dataIndex: 'opt',
-                width: 200,
-                render: (text, record, index) => {
-                    return <div><a href='#' onClick={this.onEditClick.bind(this, record, index)}>编辑</a>
-                    <Divider type="vertical" />
-                    <Popconfirm
-                        placement='leftTop'
-                        title='确定删除吗？'
-                        onConfirm={this.onDeleteClick.bind(this, record)}
-                        okText='确认'
-                        cancelText='取消'>
-                        <a>删除</a>
-                        </Popconfirm>
-                    </div>
-                }
-            }]
     }
 
-    componentDidMount () {
-        const { getAllEmployee } = this.props.bindedactions;
-        getAllEmployee();
+    async componentDidMount () {
+        const Containers = await import('../containers');
+        this.setState({
+			...Containers,
+		})
     }
 
-    addEmployee () {
-        let object = {
-            name: '',
-            age: '',
-            salary: '',
-            phone: ''
-        }
-        this.setState({visiable: true, object, currentType: 'add', newKey: Math.random()})
-    }
-
-    onEditClick (record) {
-        this.setState({visiable: true, object: record, currentType: 'edit', newKey: Math.random()})
-    }
-
-    onDeleteClick (record) {
-        const { deleteEmployee, getAllEmployee } = this.props.bindedactions;
-        deleteEmployee({name: record.name}).then(rst => {
-            if(rst.ok && rst.ok === 1) {
-                message.info('删除成功');
-                getAllEmployee();
-            } else {
-                message.error('删除失败');
-            }
-        })
-    }
-
-    _goCancell () {
-        this.setState({visiable: false})
-    }
-
-    _onOkClick () {
-        this.props.form.validateFields((err,values)=>{
-            const { currentType, object } = this.state;
-            const { createEmployee, getAllEmployee, updateEmployee } = this.props.bindedactions;
-            let obj = {
-                name: values.name,
-                age: values.age,
-                salary: values.salary,
-                phone: values.phone
-            }
-            if (currentType === 'add') {
-                createEmployee({},obj).then(rst => {
-                    if (rst.error) {
-                        message.error('新增员工失败')
-                    } else {
-                        message.info('新增员工成功');
-                        this.setState({visiable: false})
-                        getAllEmployee();
-                    }
-                })
-            } else if (currentType === 'edit') {
-                updateEmployee({name: object.name},obj).then(rst => {
-                    if(rst.ok && rst.ok === 1) {
-                        message.info('更新成功');
-                        getAllEmployee();
-                    } else {
-                        message.error('更新失败');
-                    }
-                    this.setState({visiable: false})
-                })
-            }
-            
-        })
-    }
-    showPics () {
-        this.setState({visiable1: true})
-    }
-     
+    
     render() {
-        const array = this.props.LOGIN ? this.props.LOGIN.employee : [];
         return (
-            <div className="body">
-                <Button onClick={this.addEmployee.bind(this)} type='primary' className="btn-top">添加员工</Button>
-                <Table
-                 columns={this.columns}
-                 bordered
-                 dataSource={array}
-                />
-                <Modal
-                        title='添加用户'
-                        width={808}
-                        key={this.state.newKey}
-                        visible={this.state.visiable}
-                        onOk={this._onOkClick.bind(this)}
-                        onCancel={this._goCancell.bind(this)}
-                        maskClosable={false}
-                    >
-                        <AddEmployee
-                            form={this.props.form}
-                            object={this.state.object}
-                        />
-                    </Modal>
-            </div>
+            <Layout className="body">
+                <Sider style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+                    <Submenu menus={Main.menus} {...this.props} ></Submenu>
+                </Sider>
+                <Layout style={{marginLeft: 200 }}>
+                    <Header style={{ background: '#fff', padding: 0 }}><h3>Hello, my sweetie</h3></Header>
+                    <Content>
+                        <div style={{ padding: 24, background: '#fff', textAlign: 'center',height:'100%' }}>
+                            <Switch>
+                                {Home && (<Route path='/main/home' component={Home} />)}
+                                {Pics && (<Route path='/main/pics' component={Pics} />)}
+                                {Chat && (<Route path='/main/chat' component={Chat} />)}
+                            </Switch>
+                        </div>
+                    </Content>
+                    <Footer>Created by Run_youngman</Footer>
+                </Layout>
+            </Layout>
         );
     }
 }
-
-const f = Form.create()(Main);
-export default f;
