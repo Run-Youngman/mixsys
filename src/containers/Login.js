@@ -49,6 +49,7 @@ class Login extends Component {
     };
     doLogin = () =>{
         this.props.form.validateFields((err,values)=>{
+            const { setCurrentUser } = this.props.bindedactions;
             if(!err){
                 var myHeaders = new Headers();
                 myHeaders.append('Content-Type', 'application/json')
@@ -62,6 +63,7 @@ class Login extends Component {
                 };
                 fetch('http://localhost:8080/login',myInit).then(async(rst)=>{
                     let response = await rst.json();
+                    setCurrentUser(values.username)
                     if(!response.failed && !response.error){
                         notification.success({
                             message: '系统信息',

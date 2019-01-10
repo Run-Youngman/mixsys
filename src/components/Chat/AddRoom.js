@@ -39,7 +39,7 @@ export default class AddModel extends Component {
                     )}
                     </FormItem>
                 <FormItem {...formItemLayout} label='描述'>
-                    {getFieldDecorator('age', {
+                    {getFieldDecorator('description', {
                         // initialValue: this.props.object.age,
                         rules: [
                             {
@@ -50,7 +50,7 @@ export default class AddModel extends Component {
                     })(<Input />)}
                 </FormItem>
                 <FormItem {...formItemLayout} label='组员'>
-                    {getFieldDecorator('salary', {
+                    {getFieldDecorator('member', {
                         // initialValue: this.props.object.salary,
                         rules: [
                             {

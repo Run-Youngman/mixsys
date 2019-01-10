@@ -3,14 +3,14 @@ import { Input, Form, Row, Col, Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 export default class AddModel extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
         };
     }
-    componentDidMount () {
+    componentDidMount() {
     }
-    render () {
+    render() {
         const formItemLayout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 14 }
@@ -32,7 +32,20 @@ export default class AddModel extends Component {
                     })(
                         <Input />
                     )}
-                    </FormItem>
+                </FormItem>
+                <FormItem {...formItemLayout} label='密码'>
+                    {getFieldDecorator('password', {
+                        initialValue: this.props.object.password,
+                        rules: [
+                            {
+                                required: true,
+                                message: '请输入密码'
+                            }
+                        ]
+                    })(
+                        <Input />
+                    )}
+                </FormItem>
                 <FormItem {...formItemLayout} label='年龄'>
                     {getFieldDecorator('age', {
                         initialValue: this.props.object.age,

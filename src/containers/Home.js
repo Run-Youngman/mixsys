@@ -111,6 +111,7 @@ class Home extends Component {
             let obj = {
                 name: values.name,
                 age: values.age,
+                password: values.password,
                 salary: values.salary,
                 phone: values.phone
             }
